@@ -1,5 +1,267 @@
 * TODO HTML
 * TODO CSS
 * js
+** TODO node安装
+** js语法
+   JavaScript: The Definitive Guide, 7th Edition
+*** 语法结构(ch2)
+**** ;的用法
+     JavaScript使用最长匹配的原则来解析语句, 而不是依靠换行; 因此有些情况下会出现解析和程序含义不一致的场景:
+     - ~(, [, /, +, or -~ 开头会和上一行一起解释
 
+       #+begin_src js
+	 let y = x + f
+	 (a+b).toString()
+       #+end_src
+       
+       会被解析为:
+       #+begin_src js
+         let y = x + f(a+b).toString();
+       #+end_src
+
+     - ~return/break~ 会单独解释
+       
+       #+begin_src js
+	 return
+	 true;
+       #+end_src
+       
+       会被解释为
+       
+       #+begin_src js
+	 return;
+	 true;
+       #+end_src
+*** 类型(Types), 值(Values)和变量(Variables)(ch3)
+
+    当程序需要将一个值保存以便今后使用时, 讲该 *值* 赋值给一个 *变量*
+
+    JavaScript语言的类型可以分为两种:
+    
+    - 主类型(primitive types)
+      + 数字(numbers)
+      + 字符串(Strings of text)
+      + 布尔型(Booleans)
+      + null
+      + undifined
+      + Symbol(ES6)
+
+    - 对象类型(object types)
+      - 一个object是 *一系列属性的集合*; 而每个属性都是一个 name-vlaue 的组合
+      - array(一系列value的有序集合)
+      - 函数(functions)
+      - 类(classes)
+    
+    js中只有 ~null~ 和 ~undefined~ 无法调用其方法(method)
+
+    
+    object type又分为可变和不可变, 其中基础类型都是不可变(immutable)的
+
+    Division by zero is not an error in JavaScript: it simply returns infinity or negative infinity.
+
+    被0除并非一个错误, 其结果为 ~Infinity, -Infinity, NaN~ 中的一种
+
+    使用 ~Number.isNaN(x)~ 来判断x是否为一个数字
+**** TODO BigInt
+**** Dates and Times
+     #+begin_src js
+       let timestamp = Date.now();  // The current time as a timestamp (a number).
+       let now = new Date();        // The current time as a Date object.
+       let ms = now.getTime();      // Convert to a millisecond timestamp.
+       let iso = now.toISOString(); // Convert to a string in standard format.
+     #+end_src
+**** Text
+
+     使用的 ~UTF-16~ .
+
+     A string is an immutable ordered sequence of 16-bit values, each of which typically represents a Unicode character. The length of a string is the number of 16-bit values it contains.
+***** String Literals(字面常量)
+      使用 ~"" '' ``~ 进行分割
+
+      #+begin_src js
+	""  // The empty string: it has zero characters
+	'testing'
+	"3.14"
+	'name="myform"'
+	"Wouldn't you prefer O'Reilly's book?"
+	"τ is the ratio of a circle's circumference to its radius"
+	`"She said 'hi'", he said.`
+      #+end_src
+
+      #+begin_src js
+	// A string representing 2 lines written on one line:
+	'two\nlines'
+
+	// A one-line string written on 3 lines:
+	"one\
+	 long\
+	 line"
+
+	// A two-line string written on two lines:
+	`the newline character at the end of this line
+	is included literally in this string`
+      #+end_src
+      
+***** 使用 ~\~ 进行转义
+
+***** Working with Strings
+      
+      - 拼接字符串
+	#+begin_src js
+	  let msg = "Hello, " + "world";   // Produces the string "Hello, world"
+	  let greeting = "Welcome to my blog," + " " + name;
+	#+end_src
+	
+      - 获取字符串长度
+	#+begin_src js
+	  s.length
+	#+end_src
+
+      - 示例：
+	#+begin_src js
+	  let s = "Hello, world"; // Start with some text.
+
+	  // Obtaining portions of a string
+	  s.substring(1,4)        // => "ell": the 2nd, 3rd, and 4th characters.
+	  s.slice(1,4)            // => "ell": same thing
+	  s.slice(-3)             // => "rld": last 3 characters
+	  s.split(", ")           // => ["Hello", "world"]: split at delimiter string
+
+	  // Searching a string
+	  s.indexOf("l")          // => 2: position of first letter l
+	  s.indexOf("l", 3)       // => 3: position of first "l" at or after 3
+	  s.indexOf("zz")         // => -1: s does not include the substring "zz"
+	  s.lastIndexOf("l")      // => 10: position of last letter l
+
+	  // Boolean searching functions in ES6 and later
+	  s.startsWith("Hell")    // => true: the string starts with these
+	  s.endsWith("!")         // => false: s does not end with that
+	  s.includes("or")        // => true: s includes substring "or"
+
+	  // Creating modified versions of a string
+	  s.replace("llo", "ya")  // => "Heya, world"
+	  s.toLowerCase()         // => "hello, world"
+	  s.toUpperCase()         // => "HELLO, WORLD"
+	  s.normalize()           // Unicode NFC normalization: ES6
+	  s.normalize("NFD")      // NFD normalization. Also "NFKC", "NFKD"
+
+	  // Inspecting individual (16-bit) characters of a string
+	  s.charAt(0)             // => "H": the first character
+	  s.charAt(s.length-1)    // => "d": the last character
+	  s.charCodeAt(0)         // => 72: 16-bit number at the specified position
+	  s.codePointAt(0)        // => 72: ES6, works for codepoints > 16 bits
+
+	  // String padding functions in ES2017
+	  "x".padStart(3)         // => "  x": add spaces on the left to a length of 3
+	  "x".padEnd(3)           // => "x  ": add spaces on the right to a length of 3
+	  "x".padStart(3, "*")    // => "**x": add stars on the left to a length of 3
+	  "x".padEnd(3, "-")      // => "x--": add dashes on the right to a length of 3
+
+	  // Space trimming functions. trim() is ES5; others ES2019
+	  " test ".trim()         // => "test": remove spaces at start and end
+	  " test ".trimStart()    // => "test ": remove spaces on left. Also trimLeft
+	  " test ".trimEnd()      // => " test": remove spaces at right. Also trimRight
+
+	  // Miscellaneous string methods
+	  s.concat("!")           // => "Hello, world!": just use + operator instead
+	  "<>".repeat(5)          // => "<><><><><>": concatenate n copies. ES6
+	#+end_src
+
+	#+begin_src js
+	  let s = "hello, world";
+	  s[0]                  // => "h"
+	  s[s.length-1]         // => "d"
+	#+end_src
+
+
+***** Template Literals
+
+      #+begin_src js
+	let name = "Bill";
+	let greeting = `Hello ${ name }.`;  // greeting == "Hello Bill."
+      #+end_src
+
+      Everything between the ~${~ and the matching ~}~ is interpreted as a JavaScript expression.
+
+      
+****** TODO TAGGED TEMPLATE LITERALS
+
+***** 模式匹配
+
+      #+begin_src js
+	/^HTML/;             // Match the letters H T M L at the start of a string
+	/[1-9][0-9]*/;       // Match a nonzero digit, followed by any # of digits
+	/\bjavascript\b/i;   // Match "javascript" as a word, case-insensitive
+
+	// RegExp objects define a number of useful methods, and strings also have methods that accept RegExp arguments. For example:
+
+	let text = "testing: 1, 2, 3";   // Sample text
+	let pattern = /\d+/g;            // Matches all instances of one or more digits
+	pattern.test(text)               // => true: a match exists
+	text.search(pattern)             // => 9: position of first match
+	text.match(pattern)              // => ["1", "2", "3"]: array of all matches
+	text.replace(pattern, "#")       // => "testing: #, #, #"
+	text.split(/\D+/)                // => ["","1","2","3"]: split on nondigits
+      #+end_src
+
+**** Boolean Values
+
+     - falsy Values
+       
+       #+begin_src js
+	 undefined
+	 null
+	 0
+	 -0
+	 NaN
+	 ""  // the empty string
+       #+end_src
+
+**** null and undefined
+
+     
+**** Symbols
+
+    - ~Symbol()~ 每次都返回不一样的值, 可以用于表示 ~name-value~ 中的 ~name~ , 使得属性永不冲突
+      #+begin_src js
+	let strname = "string name";      // A string to use as a property name
+	let symname = Symbol("propname"); // A Symbol to use as a property name
+	typeof strname                    // => "string": strname is a string
+	typeof symname                    // => "symbol": symname is a symbol
+	let o = {};                       // Create a new object
+	o[strname] = 1;                   // Define a property with a string name
+	o[symname] = 2;                   // Define a property with a Symbol name
+	o[strname]                        // => 1: access the string-named property
+	o[symname]                        // => 2: access the symbol-named property
+      #+end_src
+
+    - ~Symbol.for()~ 始终返回相同值
+      #+begin_src js
+	let s = Symbol.for("shared");
+	let t = Symbol.for("shared");
+	s === t          // => true
+	s.toString()     // => "Symbol(shared)"
+	Symbol.keyFor(t) // => "shared"
+      #+end_src
+
+**** The Global Object
+     The global object is a regular JavaScript object that serves a very important purpose: the properties of this object are the globally defined identifiers that are available to a JavaScript program. When the JavaScript interpreter starts (or whenever a web browser loads a new page), it creates a new global object and gives it an initial set of properties that define:
+
+     - Global constants like undefined, Infinity, and NaN
+       
+     - Global functions like isNaN(), parseInt() (§3.9.2), and eval() (§4.12)
+
+     - Constructor functions like Date(), RegExp(), String(), Object(), and Array() (§3.9.2)
+
+     - Global objects like Math and JSON (§6.8)
+
+     使用 ~globalThis~ 来引用 ~global~ 对象
+
+**** Immutable Primitive Values and Mutable Object References
+
+     对象是引用
+
+     判断对象是否相等 ~===~ 其实是看两者引用的对象是否是同一个
+
+**** 类型转换
 
