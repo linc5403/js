@@ -264,4 +264,674 @@
      判断对象是否相等 ~===~ 其实是看两者引用的对象是否是同一个
 
 **** 类型转换
+     #+begin_src js
+       10 + " objects"     // => "10 objects":  Number 10 converts to a string
+       "7" * "4"           // => 28: both strings convert to numbers
+       let n = 1 - "x";    // n == NaN; string "x" can't convert to a number
+       n + " objects"      // => "NaN objects": NaN converts to string "NaN"
+     #+end_src
+
+     
+***** 3.9.1 Conversions and Equality
+
+      #+begin_src js
+	null == undefined // => true: These two values are treated as equal.
+	"0" == 0          // => true: String converts to a number before comparing.
+	0 == false        // => true: Boolean converts to number before comparing.
+	"0" == false      // => true: Both operands convert to 0 before comparing!
+      #+end_src
+
+      
+***** 3.9.2 Explicit Conversions
+      
+      #+begin_src js
+	Number("3")    // => 3
+	String(false)  // => "false":  Or use false.toString()
+	Boolean([])    // => true
+      #+end_src
+
+      Any value other than null or undefined has a toString() method, and the result of this method is usually the same as that returned by the String() function.
+
+      除了 ~null~ 和 ~undefined~ 的所有value都有 ~toString()~ 的方法, 而该方法的结果通常和 ~String()~ 方法的返回值一致
+
+      #+begin_src js
+	x + ""   // => String(x)
+	+x       // => Number(x)
+	x-0      // => Number(x)
+	!!x      // => Boolean(x): Note double !
+      #+end_src
+
+      #+begin_src js
+	let n = 17;
+	let binary = "0b" + n.toString(2);  // binary == "0b10001"
+	let octal = "0o" + n.toString(8);   // octal == "0o21"
+	let hex = "0x" + n.toString(16);    // hex == "0x11"
+      #+end_src
+
+      #+begin_src js
+	parseInt("3 blind mice")     // => 3
+	parseFloat(" 3.14 meters")   // => 3.14
+	parseInt("-12.34")           // => -12
+	parseInt("0xFF")             // => 255
+	parseInt("0xff")             // => 255
+	parseInt("-0XFF")            // => -255
+	parseFloat(".1")             // => 0.1
+	parseInt("0.1")              // => 0
+	parseInt(".1")               // => NaN: integers can't start with "."
+	parseFloat("$72.47")         // => NaN: numbers can't start with "$"
+      #+end_src
+
+      
+***** 3.9.3 Object to Primitive Conversions
+      toString(), and its job is to return a string representation of the object. 
+
+      valueOf() it is supposed to convert an object to a primitive value that represents the object, if any such primitive value exists.
+
+**** 3.10 Variable Declaration and Assignment
+
+***** 3.10.1 Declarations with let and const
+
+****** VARIABLE AND CONSTANT SCOPE
+       let, const -> block scoped
+
+****** REPEATED DECLARATIONS
+       同一作用域不能重复声明变量或常量
+
+****** DECLARATIONS AND TYPES
+
+***** TODO 3.10.2 Variable Declarations with var
+
+***** 3.10.3 Destructuring Assignment
+      #+begin_src js
+	let o = { x: 1, y: 2 }; // The object we'll loop over
+	for(const [name, value] of Object.entries(o)) {
+	    console.log(name, value); // Prints "x 1" and "y 2"
+	}
+      #+end_src
+
+      #+begin_src js
+	let [x,y] = [1];     // x == 1; y == undefined
+	[x,y] = [1,2,3];     // x == 1; y == 2
+	[,x,,y] = [1,2,3,4]; // x == 2; y == 4
+      #+end_src
+
+      #+begin_src js
+	let [x, ...y] = [1,2,3,4];  // y == [2,3,4]
+      #+end_src
+
+      Destructuring assignment can be used with nested arrays. In this case, the lefthand side of the assignment should look like a nested array literal:
+      #+begin_src js
+	let [a, [b, c]] = [1, [2,2.5], 3]; // a == 1; b == 2; c == 2.5
+      #+end_src
+
+      You can use any iterable object (Chapter 12) on the righthand side of the assignment; any object that can be used with a for/of loop (§5.4.4) can also be destructured:
+      #+begin_src js
+	let [first, ...rest] = "Hello"; // first == "H"; rest == ["e","l","l","o"]
+      #+end_src
+
+      Destructuring assignment can also be performed when the righthand side is an object value. In this case, the lefthand side of the assignment looks something like an object literal: a comma-separated list of variable names within curly braces:
+
+      #+begin_src js
+	let transparent = {r: 0.0, g: 0.0, b: 0.0, a: 1.0}; // A RGBA color
+	let {r, g, b} = transparent;  // r == 0.0; g == 0.0; b == 0.0
+      #+end_src
+
+      #+begin_src js
+	// Same as const sin=Math.sin, cos=Math.cos, tan=Math.tan
+	const {sin, cos, tan} = Math;
+      #+end_src
+
+      #+begin_src js
+	// Same as const cosine = Math.cos, tangent = Math.tan;
+	const { cos: cosine, tan: tangent } = Math;
+      #+end_src
+      
+      #+begin_src js
+	let points = [{x: 1, y: 2}, {x: 3, y: 4}];     // An array of two point objects
+	let [{x: x1, y: y1}, {x: x2, y: y2}] = points; // destructured into 4 variables.
+	(x1 === 1 && y1 === 2 && x2 === 3 && y2 === 4) // => true
+      #+end_src
+
+      #+begin_src js
+	let points = { p1: [1,2], p2: [3,4] };         // An object with 2 array props
+	let { p1: [x1, y1], p2: [x2, y2] } = points;   // destructured into 4 vars
+	(x1 === 1 && y1 === 2 && x2 === 3 && y2 === 4) // => true
+
+      #+end_src
+
+*** Chapter 4. Expressions and Operators
+    
+**** 4.1 Primary Expressions
+     #+begin_src js
+       1.23         // A number literal
+       "hello"      // A string literal
+       /pattern/    // A regular expression literal
+     #+end_src
+
+     #+begin_src js
+       i             // Evaluates to the value of the variable i.
+       sum           // Evaluates to the value of the variable sum.
+       undefined     // The value of the "undefined" property of the global object
+     #+end_src
+**** 4.2 Object and Array Initializers
+
+     Undefined elements can be included in an array literal by simply omitting a value between commas. For example, the following array contains five elements, including three *undefined elements*:
+
+     #+begin_src js
+       let sparseArray = [1,,,,5];
+     #+end_src
+**** 4.3 Function Definition Expressions
+     #+begin_src js
+       let square = function(x) { return x*x; };
+     #+end_src
+**** 4.4 Property Access Expressions
+     #+begin_src js
+       expression.identifier
+       expression[expression ]
+     #+end_src
+
+     #+begin_src js
+       let o = {x: 1, y: {z: 3}}; // An example object
+       let a = [o, 4, [5, 6]];    // An example array that contains the object
+       o.x                        // => 1: property x of expression o
+       o.y.z                      // => 3: property z of expression o.y
+       o["x"]                     // => 1: property x of object o
+       a[1]                       // => 4: element at index 1 of expression a
+       a[2]["1"]                  // => 6: element at index 1 of expression a[2]
+       a[0].x                     // => 1: property x of expression a[0]
+     #+end_src
+***** 4.4.1 Conditional Property Access
+      #+begin_src js
+	let a = { b: null };
+	a.b?.c.d   // => undefined
+      #+end_src
+      #+begin_src js
+	let a = { b: {} };
+	a.b?.c?.d  // => undefined
+      #+end_src
+      #+begin_src js
+	let a;          // Oops, we forgot to initialize this variable!
+	let index = 0;
+	try {
+	    a[index++]; // Throws TypeError
+	} catch(e) {
+	    index       // => 1: increment occurs before TypeError is thrown
+	}
+	a?.[index++]    // => undefined: because a is undefined
+	index           // => 1: not incremented because ?.[] short-circuits
+	a[index++]      // !TypeError: can't index undefined.
+      #+end_src
+**** 4.5 Invocation Expressions
+     #+begin_src js
+       f(0)            // f is the function expression; 0 is the argument expression.
+       Math.max(x,y,z) // Math.max is the function; x, y, and z are the arguments.
+       a.sort()        // a.sort is the function; there are no arguments.
+     #+end_src
+***** 4.5.1 Conditional Invocation
+
+      #+begin_src js
+	function square(x, log) { // The second argument is an optional function
+	    log?.(x);             // Call the function if there is one
+	    return x * x;         // Return the square of the argument
+	}
+      #+end_src
+      
+      等价于:
+
+      #+begin_src js
+	function square(x, log) { // The second argument is an optional function
+	    if (log) {            // If the optional function is passed
+		log(x);           // Invoke it
+	    }
+	    return x * x;         // Return the square of the argument
+	}
+      #+end_src
+
+      条件调用是短路操作
+
+      #+begin_src js
+	let f = null, x = 0;
+	try {
+	    f(x++); // Throws TypeError because f is null
+	} catch(e) {
+	    x       // => 1: x gets incremented before the exception is thrown
+	}
+	f?.(x++)    // => undefined: f is null, but no exception thrown
+	x           // => 1: increment is skipped because of short-circuiting
+      #+end_src
+
+      在上面的示例中, 因为 ~f~ 为 ~null~ 所以后面的 ~(x++)~ 并不会被执行
+**** 4.6 Object Creation Expressions
+     An object creation expression creates a new object and invokes a function (called a constructor) to initialize the properties of that object.
+     #+begin_src js
+       new Object()
+       new Point(2,3)
+     #+end_src
+
+     If no arguments are passed to the constructor function in an object creation expression, the empty pair of parentheses can be omitted:
+
+     #+begin_src js
+       new Object
+       new Date
+     #+end_src
+**** 4.7 Operator Overview
+**** 4.12 Evaluation Expressions
+     Like many interpreted languages, JavaScript has the ability to interpret strings of JavaScript source code, evaluating them to produce a value. JavaScript does this with the global function eval():
+
+     #+begin_src js
+       eval("3+2")    // => 5
+     #+end_src
+
+     Dynamic evaluation of strings of source code is a powerful language feature that is almost never necessary in practice. If you find yourself using eval(), you should think carefully about whether you really need to use it. 
+*** Chapter 5. Statements
+    - Conditionals
+    - Loops
+    - Jumps
+**** 5.1 Expression Statements
+
+     #+begin_src js
+       greeting = "Hello " + name;
+       i *= 3;
+     #+end_src
+**** 5.2 Compound and Empty Statements
+
+     #+begin_src js
+       {
+	   x = Math.PI;
+	   cx = Math.cos(x);
+	   console.log("cos(π) = " + cx);
+       }
+     #+end_src
+**** 5.3 Conditionals
+***** 5.3.1 if
+      #+begin_src js
+	i = j = 1;
+	k = 2;
+	if (i === j)
+	    if (j === k)
+		console.log("i equals k");
+	else
+	    console.log("i doesn't equal j");    // WRONG!!
+      #+end_src
+***** 5.3.3 switch
+
+      #+begin_src js
+	switch(n) {
+	case 1:                        // Start here if n === 1
+	    // Execute code block #1.
+	    break;                     // Stop here
+	case 2:                        // Start here if n === 2
+	    // Execute code block #2.
+	    break;                     // Stop here
+	case 3:                        // Start here if n === 3
+	    // Execute code block #3.
+	    break;                     // Stop here
+	default:                       // If all else fails...
+	    // Execute code block #4.
+	    break;                     // Stop here
+	}
+      #+end_src
+      
+      #+begin_src js
+	function convert(x) {
+	    switch(typeof x) {
+	    case "number":            // Convert the number to a hexadecimal integer
+		return x.toString(16);
+	    case "string":            // Return the string enclosed in quotes
+		return '"' + x + '"';
+	    default:                  // Convert any other type in the usual way
+		return String(x);
+	    }
+	}
+      #+end_src
+**** 5.4 Loops
+***** 5.4.1 while
+      #+begin_src js
+	let count = 0;
+	while(count < 10) {
+	    console.log(count);
+	    count++;
+	}
+      #+end_src
+***** 5.4.2 do/while
+      #+begin_src js
+	function printArray(a) {
+	    let len = a.length, i = 0;
+	    if (len === 0) {
+		console.log("Empty Array");
+	    } else {
+		do {
+		    console.log(a[i]);
+		} while(++i < len);
+	    }
+	}
+      #+end_src
+***** 5.4.3 for
+      #+begin_src js
+	let i, j, sum = 0;
+	for(i = 0, j = 10 ; i < 10 ; i++, j--) {
+	    sum += i * j;
+	}
+      #+end_src
+***** 5.4.4 for/of
+      The for/of loop works with *iterable objects*.
+
+      用于 *可迭代对象*
+
+      #+begin_src js
+	let data = [1, 2, 3, 4, 5, 6, 7, 8, 9], sum = 0;
+	for(let element of data) {
+	    sum += element;
+	}
+	sum       // => 45
+      #+end_src
+****** FOR/OF WITH OBJECTS
+
+       以下用法是错误的, 原因是object非可迭代对象:
+
+       #+begin_src js
+	 let o = { x: 1, y: 2, z: 3 };
+	 for(let element of o) { // Throws TypeError because o is not iterable
+	     console.log(element);
+	 }
+       #+end_src
+
+       需要使用如下3种方法将对象转换为可迭代对象:
+
+       - ~Object.keys()~
+       
+         #+begin_src js
+  	 let o = { x: 1, y: 2, z: 3 };
+  	 let keys = "";
+  	 for(let k of Object.keys(o)) {
+  	     keys += k;
+  	 }
+  	 keys  // => "xyz"
+         #+end_src
+
+       - ~Object.values()~
+         #+begin_src js
+  	 let sum = 0;
+  	 for(let v of Object.values(o)) {
+  	     sum += v;
+  	 }
+  	 sum // => 6
+         #+end_src
+
+       - ~Object.entries()~
+	 
+	 #+begin_src js
+	   let pairs = "";
+	   for(let [k, v] of Object.entries(o)) {
+	       pairs += k + v;
+	   }
+	   pairs  // => "x1y2z3"	 
+	 #+end_src
+****** FOR/OF WITH STRINGS
+
+       Strings are iterable character-by-character in ES6:
+
+       #+begin_src js
+	 let frequency = {};
+	 for(let letter of "mississippi") {
+	     if (frequency[letter]) {
+		 frequency[letter]++;
+	     } else {
+		 frequency[letter] = 1;
+	     }
+	 }
+	 frequency   // => {m: 1, i: 4, s: 4, p: 2}
+       #+end_src
+
+****** FOR/OF WITH SET AND MAP
+       - 用于set
+
+	 #+begin_src js
+	   let text = "Na na na na na na na na Batman!";
+	   let wordSet = new Set(text.split(" "));
+	   let unique = [];
+	   for(let word of wordSet) {
+	       unique.push(word);
+	   }
+	   unique // => ["Na", "na", "Batman!"]
+	 #+end_src
+
+       - 用于map
+	 
+	 Map Object 迭代的是key,value对:
+
+	 #+begin_src js
+	   let m = new Map([[1, "one"]]);
+	   for(let [key, value] of m) {
+	       key    // => 1
+	       value  // => "one"
+	   }
+	 #+end_src
+
+****** TODO ASYNCHRONOUS ITERATION WITH FOR/AWAIT
+       #+begin_src js
+	 // Read chunks from an asynchronously iterable stream and print them out
+	 async function printStream(stream) {
+	     for await (let chunk of stream) {
+		 console.log(chunk);
+	     }
+	 }
+
+       #+end_src
+
+***** 5.4.5 for/in
+
+      While a for/of loop requires an iterable object after the of, a for/in loop works with any object after the in.
+
+      #+begin_src js
+	for(let p in o) {      // Assign property names of o to variable p
+	    console.log(o[p]); // Print the value of each property
+	}
+      #+end_src
+
+      for..of遍历数组时返回数组的元素, 而for..in则返回数组的下标
+      #+begin_src js
+	> a
+	[ 1, 2, 3 ]
+	> for (let i in a) {
+	... console.log(i);
+	... }
+	0
+	1
+	2
+	undefined
+	> for (let i of a) {
+	... console.log(i);
+	... }
+	1
+	2
+	3
+	undefined
+      #+end_src
+
+
+      *for..in遍历一个对象(Object)的几乎所有属性*
+
+      #+begin_src js
+	> for (let a in global) {
+	... console.log(a);
+	... }
+	global
+	clearInterval
+	clearTimeout
+	setInterval
+	setTimeout
+	queueMicrotask
+	clearImmediate
+	setImmediate
+	undefined
+      #+end_src
+
+**** 5.5 Jumps
+
+***** 5.5.1 Labeled Statements
+
+      使用冒号来表示一个标签:
+
+      #+begin_src js
+	identifier: statement
+      #+end_src
+
+      #+begin_src js
+	mainloop: while(token !== null) {
+	    // Code omitted...
+	    continue mainloop;  // Jump to the next iteration of the named loop
+	    // More code omitted...
+	}
+      #+end_src
+      
+      ~break~ 和 ~continue~ 都可以使用Lable在后面
+
+***** 5.5.5 yield
+
+      ~yield~ 和 ~return~ 类似, 但是仅用在ES6的生成器函数中
+
+***** 5.5.6 throw
+
+      丢个异常出来, ~throw new Error("这是个错误");~
+
+***** 5.5.7 try/catch/finally
+
+      #+begin_src js
+	try {
+	    // Ask the user to enter a number
+	    let n = Number(prompt("Please enter a positive integer", ""));
+	    // Compute the factorial of the number, assuming the input is valid
+	    let f = factorial(n);
+	    // Display the result
+	    alert(n + "! = " + f);
+	}
+	catch(ex) {     // If the user's input was not valid, we end up here
+	    alert(ex);  // Tell the user what the error is
+	}
+      #+end_src
+
+      尽管有时不需要使用到 ~finally~ 但是它在有的时候确实必须的, 比如需要清除 ~try~ 中打开的资源, 搞乱的环境等.
+
+      In the normal case, the JavaScript interpreter reaches the end of the try block and then proceeds to the finally block, which performs any necessary cleanup. If the interpreter left the try block because of a return, continue, or break statement, the finally block is executed before the interpreter jumps to its new destination.
+
+      所以呢, 即使 ~try~ 中break, continue或是return了, 也会先执行finally里面的代码后再跳转.
+
+      If an exception occurs in the try block and there is an associated catch block to handle the exception, the interpreter first executes the catch block and then the finally block. If there is no local catch block to handle the exception, the interpreter first executes the finally block and then jumps to the nearest containing catch clause.
+
+      有异常发生的情况: 有catch就先执行catch里面的代码,再执行finally. 没有catch先执行finally, 再异常再throw到上一层去catch.
+
+      #+begin_src js
+	// Like JSON.parse(), but return undefined instead of throwing an error
+	function parseJSON(s) {
+	    try {
+		return JSON.parse(s);
+	    } catch {
+		// Something went wrong but we don't care what it was
+		return undefined;
+	    }
+	}
+      #+end_src
+      
+      
+**** 5.6 Miscellaneous Statements
+     
+***** 5.6.1 with
+
+      The with statement runs a block of code as if the properties of a specified object were variables in scope for that code. It has the following syntax:
+
+      好象是仅仅为了方便:
+
+      #+begin_src js
+	document.forms[0].address.value
+      #+end_src
+
+      #+begin_src js
+	with(document.forms[0]) {
+	    // Access form elements directly here. For example:
+	    name.value = "";
+	    address.value = "";
+	    email.value = "";
+	}
+      #+end_src
+
+      但是你也可以这样来获取对象
+
+      #+begin_src js
+	let f = document.forms[0];
+	f.name.value = "";
+	f.address.value = "";
+	f.email.value = "";
+      #+end_src
+
+      
+***** 5.6.2 debugger
+      
+      就是个断点:
+      
+      #+begin_src js
+	function f(o) {
+	  if (o === undefined) debugger;  // Temporary line for debugging purposes
+	  ...                             // The rest of the function goes here.
+	}
+      #+end_src
+
+***** TODO 5.6.3 “use strict”
+
+**** 5.7 Declarations
+
+***** 5.7.1 const, let, and var
+
+      - const -> 常量
+      - let -> 变量
+      - var -> 奇怪的东西
+
+***** 5.7.2 function
+      #+begin_src js
+	function area(radius) {
+	    return Math.PI * radius * radius;
+	}
+      #+end_src
+
+***** 5.7.3 class
+
+      #+begin_src js
+	class Circle {
+	    constructor(radius) { this.r = radius; }
+	    area() { return Math.PI * this.r * this.r; }
+	    circumference() { return 2 * Math.PI * this.r; }
+	}
+      #+end_src
+
+***** 5.7.4 import and export
+      
+      The import and export declarations are used together to make values defined in one module of JavaScript code available in another module.
+
+      A module is a file of JavaScript code with its own global namespace, completely independent of all other modules.
+
+      The only way that a value (such as function or class) defined in one module can be used in another module is if the defining module exports it with export and the using module imports it with import.
+
+      #+begin_src js
+	import Circle from './geometry/circle.js';
+	import { PI, TAU } from './geometry/constants.js';
+	import { magnitude as hypotenuse } from './vectors/utils.js';
+      #+end_src
+
+      #+begin_src js
+	// geometry/constants.js
+	const PI = Math.PI;
+	const TAU = 2 * PI;
+	export { PI, TAU };
+      #+end_src
+
+      #+begin_src js
+	export const TAU = 2 * Math.PI;
+	export function magnitude(x,y) { return Math.sqrt(x*x + y*y); }
+	export default class Circle { /* class definition omitted here */ }
+      #+end_src
+
+      
+*** Chapter 6. Objects
+
+**** 6.1 Introduction to Objects
 
