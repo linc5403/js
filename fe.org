@@ -173,7 +173,6 @@
 	  s[s.length-1]         // => "d"
 	#+end_src
 
-
 ***** Template Literals
 
       #+begin_src js
@@ -183,7 +182,6 @@
 
       Everything between the ~${~ and the matching ~}~ is interpreted as a JavaScript expression.
 
-      
 ****** TODO TAGGED TEMPLATE LITERALS
 
 ***** 模式匹配
@@ -219,7 +217,6 @@
 
 **** null and undefined
 
-     
 **** Symbols
 
     - ~Symbol()~ 每次都返回不一样的值, 可以用于表示 ~name-value~ 中的 ~name~ , 使得属性永不冲突
