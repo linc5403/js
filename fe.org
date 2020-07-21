@@ -931,4 +931,66 @@
 *** Chapter 6. Objects
 
 **** 6.1 Introduction to Objects
+     Any value in JavaScript that is not a string, a number, a Symbol, or true, false, null, or undefined is an object.
+     
+     JavaScript uses the term *own property* to refer to non-inherited properties.
 
+     In addition to its name and value, each property has three property attributes:
+
+     - The writable attribute specifies whether the value of the property can be set.
+
+     - The enumerable attribute specifies whether the property name is returned by a for/in loop.
+
+     - The configurable attribute specifies whether the property can be deleted and whether its attributes can be altered.
+
+     By default, however, all properties of the objects you create are writable, enumerable, and configurable.
+
+     
+***** 6.2 Creating Objects
+
+      Objects can be created with object literals, with the *new* keyword, and with the ~Object.create()~ function.
+
+****** 6.2.1 Object Literals
+       
+       #+begin_src js
+	 let empty = {};                          // An object with no properties
+	 let point = { x: 0, y: 0 };              // Two numeric properties
+	 let p2 = { x: point.x, y: point.y+1 };   // More complex values
+	 let book = {
+	     "main title": "JavaScript",          // These property names include spaces,
+	     "sub-title": "The Definitive Guide", // and hyphens, so use string literals.
+	     for: "all audiences",                // for is reserved, but no quotes.
+	     author: {                            // The value of this property is
+		 firstname: "David",              // itself an object.
+		 surname: "Flanagan"
+	     }
+	 };
+       #+end_src
+
+       An object literal is an expression that creates and initializes a new and distinct object each time it is evaluated.
+
+       
+****** 6.2.2 Creating Objects with new
+
+       #+begin_src js
+	 let o = new Object();  // Create an empty object: same as {}.
+	 let a = new Array();   // Create an empty array: same as [].
+	 let d = new Date();    // Create a Date object representing the current time
+	 let r = new Map();     // Create a Map object for key/value mapping
+       #+end_src
+
+       使用 ~constructor~ 来初始化一个新的对象, 必须使用 ~new~ .
+       
+****** 6.2.3 Prototypes
+       
+       Almost every JavaScript object has a second JavaScript object associated with it. This second object is known as a prototype, and the first object inherits properties from the prototype.
+
+       
+
+****** 6.2.4 Object.create()
+
+       Object.create() creates a new object, using its first argument as the prototype of that object:
+       #+begin_src js
+	 let o1 = Object.create({x: 1, y: 2});     // o1 inherits properties x and y.
+	 o1.x + o1.y                               // => 3
+       #+end_src
