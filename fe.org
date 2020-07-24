@@ -1,7 +1,24 @@
 * TODO HTML
 * TODO CSS
 * js
-** TODO node安装
+** DONE node安装
+   CLOSED: [2020-07-23 Thu 10:47]
+*** 下载地址
+
+    https://nodejs.org/zh-cn/download/
+*** 镜像配置
+
+    https://nodejs.org/zh-cn/download/
+
+    配置cnpm的别名，使用淘宝镜像. 之后使用cnpm命令来替代npm命令
+
+    #+begin_src sh
+      alias cnpm="npm --registry=https://registry.npm.taobao.org \
+      --cache=$HOME/.npm/.cache/cnpm \
+      --disturl=https://npm.taobao.org/dist \
+      --userconfig=$HOME/.cnpmrc"
+    #+end_src
+    
 ** js语法
    JavaScript: The Definitive Guide, 7th Edition
 *** 语法结构(ch2)
@@ -927,9 +944,7 @@
 	export default class Circle { /* class definition omitted here */ }
       #+end_src
 
-      
 *** Chapter 6. Objects
-
 **** 6.1 Introduction to Objects
      Any value in JavaScript that is not a string, a number, a Symbol, or true, false, null, or undefined is an object.
      
@@ -945,52 +960,78 @@
 
      By default, however, all properties of the objects you create are writable, enumerable, and configurable.
 
-     
-***** 6.2 Creating Objects
+**** 6.2 Creating Objects
 
-      Objects can be created with object literals, with the *new* keyword, and with the ~Object.create()~ function.
+     Objects can be created with object literals, with the *new* keyword, and with the ~Object.create()~ function.
 
-****** 6.2.1 Object Literals
+***** 6.2.1 Object Literals
        
-       #+begin_src js
-	 let empty = {};                          // An object with no properties
-	 let point = { x: 0, y: 0 };              // Two numeric properties
-	 let p2 = { x: point.x, y: point.y+1 };   // More complex values
-	 let book = {
-	     "main title": "JavaScript",          // These property names include spaces,
-	     "sub-title": "The Definitive Guide", // and hyphens, so use string literals.
-	     for: "all audiences",                // for is reserved, but no quotes.
-	     author: {                            // The value of this property is
-		 firstname: "David",              // itself an object.
-		 surname: "Flanagan"
-	     }
-	 };
-       #+end_src
+      #+begin_src js
+	let empty = {};                          // An object with no properties
+	let point = { x: 0, y: 0 };              // Two numeric properties
+	let p2 = { x: point.x, y: point.y+1 };   // More complex values
+	let book = {
+	    "main title": "JavaScript",          // These property names include spaces,
+	    "sub-title": "The Definitive Guide", // and hyphens, so use string literals.
+	    for: "all audiences",                // for is reserved, but no quotes.
+	    author: {                            // The value of this property is
+		firstname: "David",              // itself an object.
+		surname: "Flanagan"
+	    }
+	};
+      #+end_src
 
-       An object literal is an expression that creates and initializes a new and distinct object each time it is evaluated.
-
-       
-****** 6.2.2 Creating Objects with new
-
-       #+begin_src js
-	 let o = new Object();  // Create an empty object: same as {}.
-	 let a = new Array();   // Create an empty array: same as [].
-	 let d = new Date();    // Create a Date object representing the current time
-	 let r = new Map();     // Create a Map object for key/value mapping
-       #+end_src
-
-       使用 ~constructor~ 来初始化一个新的对象, 必须使用 ~new~ .
-       
-****** 6.2.3 Prototypes
-       
-       Almost every JavaScript object has a second JavaScript object associated with it. This second object is known as a prototype, and the first object inherits properties from the prototype.
+      An object literal is an expression that creates and initializes a new and distinct object each time it is evaluated.
 
        
+***** 6.2.2 Creating Objects with new
 
-****** 6.2.4 Object.create()
+      #+begin_src js
+	let o = new Object();  // Create an empty object: same as {}.
+	let a = new Array();   // Create an empty array: same as [].
+	let d = new Date();    // Create a Date object representing the current time
+	let r = new Map();     // Create a Map object for key/value mapping
+      #+end_src
 
-       Object.create() creates a new object, using its first argument as the prototype of that object:
-       #+begin_src js
-	 let o1 = Object.create({x: 1, y: 2});     // o1 inherits properties x and y.
-	 o1.x + o1.y                               // => 3
-       #+end_src
+      使用 ~constructor~ 来初始化一个新的对象, 必须使用 ~new~ .
+       
+***** 6.2.3 Prototypes
+       
+      Almost every JavaScript object has a second JavaScript object associated with it. This second object is known as a prototype, and the first object inherits properties from the prototype.
+
+***** 6.2.4 Object.create()
+
+      Object.create() creates a new object, using its first argument as the prototype of that object:
+
+      #+begin_src js
+	let o1 = Object.create({x: 1, y: 2});     // o1 inherits properties x and y.
+	o1.x + o1.y                               // => 3
+      #+end_src
+       
+      #+begin_src js
+	let o2 = Object.create(null);             // o2 inherits no props or methods.
+      #+end_src
+
+      #+begin_src js
+	let o3 = Object.create(Object.prototype); // o3 is like {} or new Object().
+      #+end_src
+
+**** 6.3 Querying and Setting Properties
+     If using the dot operator, the righthand side must be a simple identifier that names the property. If using square brackets, the value within the brackets must be an expression that evaluates to a string that contains the desired property name:
+
+     #+begin_src js
+       let author = book.author;       // Get the "author" property of the book.
+       let name = author.surname;      // Get the "surname" property of the author.
+       let title = book["main title"]; // Get the "main title" property of the book.
+     #+end_src
+
+     #+begin_src js
+       book.edition = 7;                   // Create an "edition" property of book.
+       book["main title"] = "ECMAScript";  // Change the "main title" property.
+     #+end_src
+
+     When using square bracket notation, we’ve said that the expression inside the square brackets must evaluate to a string.
+
+      
+***** 6.3.1 Objects As Associative Arrays
+       
