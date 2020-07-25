@@ -1035,3 +1035,11 @@
       
 ***** 6.3.1 Objects As Associative Arrays
        
+      #+begin_src js
+	object.property
+	object["property"]
+      #+end_src
+
+      The second syntax, using square brackets and a string, looks like array access, but to an array indexed by strings rather than by numbers. This kind of array is known as an associative array (or hash or map or dictionary). JavaScript objects are associative arrays, and this section explains why that is important.
+
+      
