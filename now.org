@@ -1,0 +1,267 @@
+* 了解Web(万维网)
+** 互联网及其历史
+   *互联网* ，又称网际网络，是众多互联网应用的基础，也是当今计算机网络的基础设施。
+
+   #+begin_example
+     我们所讲的 移动互联网，便是将移动通信和互联网结合，使移动设备通过Wifi（802.11x）、3G、4G、5G等技术，在移动设备或移动电话网络之上运行TCP/IP协议，使移动设备接入互联网。
+   #+end_example
+
+   在技术上，互联网（Internet）是指使用 *TCP/IP* 协议族互相连接在一起的计算机网络。互联网的概念强调了：将运行着不同链路协议的子网，通过网际互联技术连接起来，于是才称为Inter-Net。
+
+   #+begin_example
+     TCP/IP协议，又称TCP/IP协议族，是一个网络通讯模型，是当前互联网的基础通讯架构。其中TCP（传输控制协议）和IP（网际协议）是其中的两个核心协议。该协议族由IETF维护。
+   #+end_example
+
+
+   互联网连接着全世界数十亿的设备，是由数百万分组交换网络（包括学术网络、商业网络、政府网络、私人网络、公开网络等）连接而成的一个国际网络。互联网提供着大量的信息资源和服务，例如：
+   
+   - 万维网提供的超文本文档和应用；
+   - 电子邮件基础设施；
+   - P2P的文件分享网络；
+   - IP电话网络。
+
+   战争是科技发展的原动力，互联网技术也不例外。
+
+   互联网的起源要追溯到冷战时期美国国防部高等研究计划署（ARPA）研制的[ARPANET][apn]。上世纪60年代出现了多种基于分组交换的网络协议，部分大学和政府也各自部署了基于分组交换的网络。
+
+   - ARPANET在1969年10月29日第一次让多个独立的网络互相连接起来。
+
+   - 1973年，ARPANET扩展为互联网，接入了英国和挪威的计算机。
+
+   - 1982年，TCP/IP协议被标准化，正式提出Internet（互联网）的概念：世界范围内完全互联的TCP/IP网络。
+     
+     ARPA的罗伯特·卡恩和斯坦福的温登·泽夫在1974年首先提出了TCP/IP协议，并于2004年因此获得图灵奖。
+
+   - 1986年，美国国家科学基金会（NSF）在大学间建立了互联网的骨干网络NSFNET，并与1994年转为商业运营。
+
+   - 80年代末到90年代初，互联网服务提供商（ISP）开始涌现，随后USENET、BITNET、多种商用X.25网络成功接入互联网。
+
+     ISP即Internet Service Provider，他们拥有互联网接口，给我们提供互联网接入服务。电信、联通就是所谓的ISP。
+
+   - 1995年互联网在美国完全商业化，去除了NSFNET的所有商业流量限制。至此，互联网已经基本成为今天我们看到的形态。
+** TCP/IP协议
+***   客户端-服务器（Client-Server）模型
+    当多台计算机需要相互通信传输数据时，他们必须遵循相同的协议（Protocol），协议可以认为是通信双方遵循的一种约定——在此基础之上，双方才能够相互理解通信的内容。
+    
+    #+begin_example
+      类比：来自两个不同国家的人必须使用同一种语言才能够进行交流
+    #+end_example
+
+
+    在计算机科学里，客户端服务器模型是一种非常流行的通信模型，通信的双方被抽象为客户端（Client）和服务器（Server）：
+
+    - 客户端：向服务器请求提供服务——例如计算两个整数a, b的和a + b
+    - 服务器：提供计算服务——例如将客户端请求的两个整数a, b的和a + b的值经过计算后返回客户端
+
+    这个模型可以用下图表示：
+
+    [[file:./img/cs-model.png]]
+*** IP地址
+    在Client-Server模型中，第一个要解决的问题是——客户端向服务器请求服务，服务器的地址在哪里。可能使用过计算机的同学都知道，如果计算机要接入互联网，那么必须拥有一个IP地址。IP地址正是通过IP协议分配给网络中的各个设备。例如Google搜索服务器的地址是：216.58.199.100，那么当我们使用Google时，实际上计算机会在网络上寻找IP地址216.58.199.100并与之进行通信，请求Google为我们提供搜索服务。
+*** TCP协议
+    当客户端知道服务器的IP地址后，接下来就是如何与之通信。TCP协议正是解决数据传输层的通信协议，它能够在不同的计算机之间建立可靠的像管道一样的连接。如下图所示：
+
+    [[file:img/ip.png]]
+
+    计算机操作系统将TCP连接抽象为套接字(Socket)，应用程序通过使用Socket接口完成TCP连接，通过TCP连接，客户端可以向服务器发送一个一个的数据包(Packet)。例如发送a=1,b=2这样的文本数据，服务器接收并计算得到结果3以后，同样通过数据包将其发送回客户端。
+
+*** 端口
+    计算机的操作系统中同时运行着多个进程（例如IM工具，邮件服务器，Web服务器），当操作系统收到与其他计算机建立TCP连接后，它如何知道收到的数据包应该交给哪个进程来处理呢？答案是端口（Port），应用程序通过操作系统提供的Socket接口建立TCP连接时，必须告诉操作系统通过哪一个端口获取TCP数据包（端口的取值范围是0-65535，不同的进程不可以使用同一个端口），这个过程也叫应用程序监听(Listen)端口。如下图所示：
+
+    [[file:img/ip-2.png]]
+
+    当客户端发起的TCP连接地址是216.58.199.100:443时（IP:Port形式的地址），服务器操作系统对于每一个访问443端口的TCP数据包，交给NodeJS进程处理。
+
+** 万维网与HTML
+   *万维网* （world wide web），又称 ~WWW~ ，便是我们所熟知的Web。Web的本质是一个由超文本文档互相链接而成的文档系统，可以看做一整个分布式的文档。万维网是互联网提供的众多服务之一，运行在互联网的基础上。
+
+   提到万维网，我们得谈一谈 万维网联盟（World Wide Web Consortium，W3C），如果你从事web开发，你会常常接触到它。万维网联盟又称W3C理事会，负责万维网标准的制定（包括HTML、CSS等），以解决web的兼容性问题。
+
+   #+begin_example
+     我们知道，人们一般通过浏览器来查看web文档（也就是网页）。然而，不同的浏览器可能对同样的web文档做出不同的显示；与此同时，不同的浏览器会定义其特定的web文档的语法（例如-webkit, -moz, -o, -ms）。浏览器之间的区别使得开发一致观感的页面变得更加困难。这时便需要w3c标准化的努力。
+   #+end_example
+
+   *超文本文档* （hypertext document）是指具有超链接功能的文档，通常被用来创建web文档（网页）。它可以包含文本、图片、音频、视频等。我们一般通过浏览器来查看超文本文档，而浏览器则通过互联网来获取这些文档。
+
+   超文本文档中一般包含若干 *超链接* （hyperlink），用户可以跟随超链接，而浏览器负责取回超链接以标识的超文本文档。
+
+   *URL* （uniform resource locator），统一资源定位符，用来全局唯一地标识Web的资源。超链接所标示的地址、浏览器地址栏的文字都是URL。
+
+   *HTML* （HyperText Markup Language，超文本标记语言）是一种创建超文本文档的语言，已经广泛地用于网页设计。HTML是用一系列的HTML标签写成的，每种HTML标签都有对应的语义和一致的外观。html文件通常以.html作为后缀名。
+
+   一个简单的HTML文件可能是这样的（我们的介绍基于[HTML5][html5]标准）：
+
+   #+begin_src html
+     <html>
+     <head>
+       <title>Hello, HTML!</title>
+     </head>
+
+     <body>
+       <p>这是一个简单的HTML文件</p>
+     </body>
+
+     </html>
+   #+end_src
+
+   可以把上述文件保存为hello.html。你会在页面中看到这是一个简单的HTML文件字样，同时浏览器的标签栏会显示 ~Hello,HTML!~ 。现在你可以不必理解上述的HTML文件，在之后的课程中我们会详细介绍HTML的语法。
+
+** HTTP协议
+   上述过程中，我们已经编写了一篇web文档 ~hello.html~ ，并且可以在本地浏览其内容。那么如何让互联网上的用户来浏览我们创建的web文档呢？这涉及到web文档在互联网传输需要的协议： ~HTTP协议~ 。
+
+   *HTTP* （超文本传输协议，HyperText Transfer Protocol）提供了一种发布和接收HTML页面的方法。HTTP协议标准是由万维网协会（World Wide Web Consortium，W3C）和互联网工程任务组（Internet Engineering Task Force，IETF）制定的，其中最著名的是RFC 2616，定义了HTTP协议中现今广泛使用的一个版本—HTTP 1.1。
+
+   让我们用一个互联网上的真实网站 http://www.baidu.com 作为例子，来讨论HTML文件是如何从服务器到达我们的浏览器的。
+
+   首先我们会打开一个浏览器，比如Chrome，在地址栏中输入 http://www.baidu.com ，接下来百度主页就显示在了浏览器中。在这个过程中，浏览器内部实际做了这样一些事情：
+
+   - 解析URL： http://www.baidu.com 的主机 ~www.baidu.com~ （即IP）
+   - 使用HTTP协议，向该主机发送请求，表示我想要该URL对应的页面
+   - 百度服务器应答该请求，并使用HTTP协议传输HTML文档给浏览器
+   - 浏览器解析该HTML（web文档）并显示
+
+   上述的过程是一个典型的HTTP通信流程：客户端发送请求（request），服务器返回响应（response）。在web开发的目的，便是实现上述过程中百度服务器所做的事情：得到Request，进行一系列计算，返回Response。很显然使用HTTP协议进行通信的过程和之前介绍的客户端-服务器模型是非常吻合的，事实上HTTP协议也是以TCP协议为基础，它的通信过程仍然是通过TCP连接进行，只不过针对Web的特性进行了更高层次的抽象，使得我们开发的应用程序能够更加简单的进行网络通信。
+
+   接下来，我们来看看HTTP协议中的这两个实体：Request、Response。
+
+*** HTTP 请求
+    HTTP请求理解为一段文本，上面的例子中，我们发送的HTTP请求如下描述：
+
+    #+begin_example
+      GET / HTTP/1.1
+      HOST www.baidu.com
+      Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+      User-Agent:Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.91 Safari/537.36
+    #+end_example
+    
+    该请求包括如下的含义：
+
+    1. 使用1.1版本的HTTP协议，指定该请求使用GET方法；
+    2. 对方主机为www.baidu.com；
+    3. 接受的响应格式为：HTML、XHTML、XML、图片、或任何其他格式；
+
+       #+begin_example
+	 q=0.9为质量值（q value），是一种HTTP协商参数的限定符，在这里表示客户端更喜欢接受哪种格式。
+       #+end_example
+
+    4. 用户代理（User-Agent）提供了当前浏览器的兼容性能。
+
+    这个请求会被发送到www.baidu.com对应的主机的80端口(80是HTTP的默认端口)。
+
+    #+begin_example
+      计算机网络采用分层设计，HTTP协议运行在TCP协议之上。TCP协议提供了一对socket（主机+端口）之间的可靠通信，于是HTTP协议只需提供主机名和端口来指定对方计算机，即可在TCP之上与之通信。
+    #+end_example
+
+
+*** HTTP 响应
+
+    如果百度的主机成功接收到了我们的请求，那么也会返回一段文本：
+    
+    #+begin_example
+      HTTP/1.1 200 OK
+      Content-Type: text/html; charset=utf-8
+    
+      <HTML内容>
+    #+end_example
+
+    上述响应包含了如下的内容：
+
+   - HTTP协议版本，这里是1.1
+   - 响应状态码，200表示成功（OK）
+   - Content-Type表示响应内容的类型，这里是HTML（还有可能是pdf, image等，浏览器会通过该字段来合适地显示该文档）
+   - 响应的主体内容，即URL http://www.baidu.com 所对应的资源：百度首页的HTML文件
+
+*** 实例
+    
+    
+**** TODO chrome
+     
+
+**** TODO PostMan
+
+
+
+    可以看到，服务器返回的body中包含了一大段文本——也就是上一节中描述的HTML文档，虽然我们阅读起来很困难，但是浏览器能够很快地将他们翻译成我们能够容易阅读的网页。
+
+*** MIME类型
+    
+    
+    在Web上需要传输的数据除了HTML文档之外，还可能包含图片、音频、视频等等不同格式的数据。MIME(Multipurpose Internet Mail Extensions)是指定HTTP协议中传输数据类型的标准，例如：
+
+    - HTML文档：text/html
+    - png图片：image/png
+      
+    通常服务器对于不同类型的数据会在HTTP响应的Header中指定： ~Content-Type: text/html~ 。这样做的目的是方便浏览器能够很好地识别数据类型，正确的在客户端展示数据。
+
+* 认识HTML
+
+  HTML（HyperText Markup Language，超文本标记语言）也就是我们常说的网页。浏览器从服务器获取HTML文件，并显示给用户。HTML是为了创建网页而设计的语言。
+
+  HTML是用一系列的HTML标签写成的，每种HTML标签都有对应的语义和大致的外观。html文件通常以.html作为后缀名。下文中HTML的相关内容均基于HTML5标准来介绍。
+
+** 编写 HTML
+   HTML是一种用于创建网页的语言，用HTML语言编写的网页我们称为HTML文件，一般以.html后缀来命名。一个最简单的HTML文件可以是这样的：
+   
+   #+begin_src html
+     <!DOCTYPE html>
+     <html>
+     <head>
+       <title>Hello, Catty!</title>
+     </head>
+     <body>
+       <p>I like fruits!!!</p>
+     </body>
+     </html>
+   #+end_src
+
+   我们对上述代码稍作解释。第一行 ~DOCTYPE~ 声明并非页面的一部分，它属于浏览器指示， 像浏览器说明当前HTML文件使用的HTML语言版本。
+
+   接着是一个 ~<html>~ 标签，标签要用尖括号包含起来，该标签与文件尾的 ~</html>~ 成对。 一对标签之间的内容均为该标签的子元素，比如 ~<html>~ 标签有两个子元素： ~<head>~ 和 ~<body>~ 。
+
+   其中 ~<head>~ 包含的内容往往用来设置HTML的 *元信息* （metadata）。比如外部样式表、页面脚本、文件编码、视口信息等。
+
+   ~<body>~ 中的内容则被显示在页面上。上述 ~<body>~ 标签包含一个子标签 ~<p>~ ，它表示一个 *段落* （paragraph）。
+
+** 查看HTML文件
+
+   把上述文本保存为hello.html，使用浏览器打开它，你会看到：
+   
+   [[file:./img/hello.png]]
+
+
+   ~<title>~ 中的内容显示在了标题栏中，而 ~<p>~ （passage，段落标签）之间的内容显示在了页面上。 ~<body>~ 中只有一个 ~<p>~ 标签，接着我们来试试其他的标签！
+
+** h 标签
+   大多数HTML标签都是用来显示和输入信息的，它们被用在 ~<body>~ 标签之中。除了上述的 ~<p>~ 标签之外，HTML提供了多种多样的标签来显示相应的内容，比如 ~<h1>~ （一级标题）和 ~<h2>~ （二级标题）标签：
+   #+begin_src html
+     <body>
+       <h1>Catie's Homepage</h1>
+       <h2>i am a little, cute catie...</h2>
+       <p>I like fruits!!!</p>
+   #+end_src
+
+   把它们添加到我们的hello.html中并刷新浏览器，便能看到这样的效果：
+
+   [[file:img/hello-p.png]]
+
+
+   事实上，除了上述的 ~<h1>~ 和 ~<h2>~ ，HTML提供了一共六级标题标签。
+
+   
+** img 标签
+   ~<img>~ 标签用来显示图片，其 ~src~ 属性用来指定图片的路径。在 ~<p>~ 前面加入一个 ~<img>~ ：
+   
+   #+begin_src html
+     <img src="./catty.jpeg">
+   #+end_src
+
+
+   同样保存后刷新浏览器，你会看到：
+
+
+
+   你要保证hello.html所在目录下存在一个catty.jpeg文件。它可以是任何图片文件，你可以去本节课的参考代码中下载。
+
+   细心的读者可能已经发现了，<img>标签并没有对应的关闭标签，这是因为<img>属于空元素，它不需要关闭标签。
+
+   ~HTML~ 标签分为常规元素（ ~normal element~ ）和空元素（ ~void element~ ）。其中空元素是自关闭的（ ~self-closing~ ），不需要成对地添加关闭标签。空元素包括： ~area, base, br, col, command, embed, hr, img, input, keygen, link, meta, param, source, track, wbr~ 。
